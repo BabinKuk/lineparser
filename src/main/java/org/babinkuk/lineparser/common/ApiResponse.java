@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import org.babinkuk.lineparser.model.ResponseData;
+import org.babinkuk.lineparser.model.ProcessData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -32,7 +32,7 @@ public class ApiResponse {
 	
 	private List<String> fieldErrors;
 	
-	private ResponseData responseData;
+	private ProcessData responseData;
 
 	public ApiResponse() {
 		
@@ -101,11 +101,11 @@ public class ApiResponse {
 		this.fieldErrors = fieldErrors;
 	}
 
-	public ResponseData getResponseData() {
+	public ProcessData getResponseData() {
 		return responseData;
 	}
 
-	public void setResponseData(ResponseData responseData) {
+	public void setResponseData(ProcessData responseData) {
 		this.responseData = responseData;
 	}
 	

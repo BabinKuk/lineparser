@@ -5,10 +5,10 @@ import org.apache.logging.log4j.Logger;
 import org.babinkuk.lineparser.common.ApiResponse;
 import org.babinkuk.lineparser.common.Echo;
 import org.babinkuk.lineparser.common.ProducesJson;
-import org.babinkuk.lineparser.model.RequestData;
+import org.babinkuk.lineparser.generic.staticformat.ParseException;
+import org.babinkuk.lineparser.generic.staticformat.RecordUnrecognizedException;
+import org.babinkuk.lineparser.model.ProcessData;
 import org.babinkuk.lineparser.service.LineParserService;
-import org.babinkuk.parser.generic.staticformat.ParseException;
-import org.babinkuk.parser.generic.staticformat.RecordUnrecognizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-///import static org.babinkuk.config.Api.ROOT;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -64,23 +63,37 @@ public class CommonController {
 	}
 	
 	/**
-	 * expose POST "/courses"
-	 * add new course
+	 * expose POST "/parse"
+	 * parse txt line
 	 * 
-	 * @param courseVO
-	 * @param validationRole
+	 * @param text line
 	 * @return
 	 * @throws JsonProcessingException
 	 * @throws ParseException 
 	 * @throws RecordUnrecognizedException 
 	 */
-	@PostMapping("")
+	@PostMapping("/parse")
 	public ResponseEntity<ApiResponse> parseLine(
-			@RequestBody RequestData requestData) throws JsonProcessingException, RecordUnrecognizedException, ParseException {
+			@RequestBody ProcessData processData) throws JsonProcessingException, RecordUnrecognizedException, ParseException {
 		
-		return ResponseEntity.of(Optional.ofNullable(lineParserService.parseLine(requestData)));
+		return ResponseEntity.of(Optional.ofNullable(lineParserService.parseLine(processData)));
 	}
 	
-
+	/**
+	 * expose POST "/construct"
+	 * construct txt line
+	 * 
+	 * @param RecordBase object
+	 * @return
+	 * @throws JsonProcessingException
+	 * @throws ParseException 
+	 * @throws RecordUnrecognizedException 
+	 */
+	@PostMapping("/construct")
+	public ResponseEntity<ApiResponse> constructLine(
+			@RequestBody ProcessData processData) throws JsonProcessingException, RecordUnrecognizedException, ParseException {
+		
+		return ResponseEntity.of(Optional.ofNullable(lineParserService.constructLine(processData)));
+	}
 	
 }

@@ -1,14 +1,13 @@
 package org.babinkuk.lineparser.model;
 
-import org.babinkuk.parser.generic.staticformat.formatter.StringTrimmer;
-import org.babinkuk.parser.generic.staticformat.parser.CalendarParser;
-import org.babinkuk.parser.generic.staticformat.validator.RegexValidator;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.babinkuk.lineparser.generic.staticformat.*;
+import org.babinkuk.lineparser.generic.staticformat.formatter.StringTrimmer;
+import org.babinkuk.lineparser.generic.staticformat.parser.CalendarParser;
+import org.babinkuk.lineparser.generic.staticformat.validator.RegexValidator;
 import org.babinkuk.lineparser.model.RecordTypeOne.FIELDS;
-import org.babinkuk.parser.generic.staticformat.*;
 
 public abstract class RecordBase extends ParsedRecordAbstract {
 	
@@ -17,7 +16,8 @@ public abstract class RecordBase extends ParsedRecordAbstract {
 	public static final ObjectParser ddmmyyyyM = new CalendarParser(new RegexValidator("[0-9]{4}-[0-9]{2}-[0-9]{2}", null), "yyyy-MM-dd", CalendarParser.PROCESS_0_EXCEPTION); // mandatory date
 	public static final ObjectParser ddmmyyyyO = new CalendarParser(new RegexValidator("[0-9]{4}-[0-9]{2}-[0-9]{2}", null), "yyyy-MM-dd", CalendarParser.PROCESS_0_NULL); // optional date
 	
-	public abstract ResponseData processRecord();
+	public abstract ProcessData parseRecord();
+	public abstract ProcessData constructRecord(ProcessData processData) throws RecordUnrecognizedException, ParseException;
 	
 	public RecordBase(int fieldNum) {
 		super(fieldNum);

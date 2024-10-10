@@ -1,13 +1,21 @@
 package org.babinkuk.lineparser.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
-import org.babinkuk.parser.generic.staticformat.LineParser;
-import org.babinkuk.parser.generic.staticformat.ObjectParser;
-import org.babinkuk.parser.generic.staticformat.ParseException;
-import org.babinkuk.parser.generic.staticformat.ParsedObject;
-import org.babinkuk.parser.generic.staticformat.ParsedRecord;
-import org.babinkuk.parser.generic.staticformat.validator.RegexValidator;
+import org.babinkuk.lineparser.generic.staticformat.LineCollectionParser;
+import org.babinkuk.lineparser.generic.staticformat.LineParser;
+import org.babinkuk.lineparser.generic.staticformat.ObjectParser;
+import org.babinkuk.lineparser.generic.staticformat.ParseException;
+import org.babinkuk.lineparser.generic.staticformat.ParsedObject;
+import org.babinkuk.lineparser.generic.staticformat.ParsedRecord;
+import org.babinkuk.lineparser.generic.staticformat.RecordUnrecognizedException;
+import org.babinkuk.lineparser.generic.staticformat.parsedobject.ParsedCalendar;
+import org.babinkuk.lineparser.generic.staticformat.parsedobject.ParsedString;
+import org.babinkuk.lineparser.generic.staticformat.validator.RegexValidator;
+import org.babinkuk.lineparser.model.RecordTypeOne.FIELDS;
 
 public class RecordTypeTwo extends RecordBase {
 
@@ -54,7 +62,7 @@ public class RecordTypeTwo extends RecordBase {
 		return lp;
 	}
 
-	public ResponseData processRecord() {
+	public ProcessData parseRecord() {
 		
 		ParsedObject sifra = getParsedObject(RecordTypeTwo.FIELDS.SIFRA.ordinal());
 		ParsedObject akc = getParsedObject(RecordTypeTwo.FIELDS.AKCIJA.ordinal());
@@ -63,7 +71,7 @@ public class RecordTypeTwo extends RecordBase {
 		
 		List<String> errors = getErrors();
 		
-		ResponseData rd = new ResponseData(sifra.toString(), akc.toString(), datum.toString(), reserve.toString());
+		ProcessData rd = new ProcessData(sifra.toString(), akc.toString(), datum.toString(), reserve.toString());
 		
 		if (!errors.isEmpty()) {
 			rd.setErrors(errors);
@@ -71,4 +79,40 @@ public class RecordTypeTwo extends RecordBase {
 		
 		return rd;
 }
+
+	@Override
+	public ProcessData constructRecord(ProcessData processData) throws RecordUnrecognizedException, ParseException {
+
+		RecordTypeTwo parsedRecord = new RecordTypeTwo();
+		List<String> errors = getErrors();
+		
+		LineCollectionParser lineCollectionParser = new LineCollectionParser();
+		lineCollectionParser.addLineParser(getLineParser());
+		
+		parsedRecord.getParsedObjects()[FIELDS.SIFRA.ordinal()] = new ParsedString(processData.getSifra());
+		parsedRecord.getParsedObjects()[FIELDS.AKCIJA.ordinal()] = new ParsedString(processData.getAkcija());
+		
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+		try {
+			cal.setTime(sdf.parse(processData.getDatum()));
+		} catch (java.text.ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		parsedRecord.getParsedObjects()[FIELDS.DATUM.ordinal()] = new ParsedCalendar(cal, "yyyy-MM-dd");
+		parsedRecord.getParsedObjects()[FIELDS.REZERVA.ordinal()] = new ParsedString(processData.getRezerva());
+		
+		String line = lineCollectionParser.construct(parsedRecord);
+		
+		ProcessData rd = new ProcessData();
+		rd.setLine(line);
+		
+		if (!errors.isEmpty()) {
+			rd.setErrors(errors);
+		}
+		
+		return rd;
+	}
 }
