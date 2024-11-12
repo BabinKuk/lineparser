@@ -40,7 +40,6 @@ public class LineParser {
 			
 			String segment;
 			try {
-				log.info("segment parse {}", line);
 				segment = line.substring(pos, pos + len);
 				log.info(segment);
 				
@@ -57,8 +56,7 @@ public class LineParser {
 				return line.substring(pos, pos + len);
 			} catch (IndexOutOfBoundsException e) {
 				throw new ParseException(line, e, e.toString());
-			}
-					
+			}	
 		}
 		
 		protected String construct(ParsedObject parsedObject, String line) throws ParseException {
@@ -106,16 +104,14 @@ public class LineParser {
 	// constructor koji prima ObjectParser za validaciju tipa linije
 	public LineParser(ObjectParser lineIdFilter) {
 		this.lineIdFilter = lineIdFilter;
-		log.info("construtor LineParser {}", lineIdFilter);
 		clearParsers();
 	}
 	
 	// dodavanje parsera za sljedeće polje, prima objectparser i duzinu polja
 	public void addParser(ObjectParser op, int len) {
-		log.info("addParser to segmentParserCollection {}:{}", op, len);
 		segmentParserCollection.add(new SegmentParser(op, segmentPositionCounter, len));
 		segmentPositionCounter += len;
-		log.info("segmentPositionCounter {}", segmentPositionCounter);
+		log.info("addParser to segmentParserCollection {}:{}:{}", op.getClass().getSimpleName(), len, segmentPositionCounter);
 	}
 	
 	// dodavanje parsera za odredjeno polje, prima objectparser, poziciju i duzinu polja
@@ -130,12 +126,12 @@ public class LineParser {
 		if (parserArray == null) {
 			return;
 		}
-		log.info("parserArray {}", parserArray.length);
+		
 		for (Object[] parser : parserArray) {
 			if (parser == null) {
 				continue;
 			}
-			log.info("addParserArray {}", parser);
+			
 			addParser((ObjectParser) parser[0], (Integer) parser[1]);
 		}
 	}
@@ -157,7 +153,6 @@ public class LineParser {
 	
 	// parsiranje linije, u slucaju greske baca ParseException
 	public ParsedRecord parse(String line) throws ParseException {
-		log.info("parsiranje linije");
 		if (line == null) {
 			throw new ParseException(line, null, "Invalid line argument");
 		}

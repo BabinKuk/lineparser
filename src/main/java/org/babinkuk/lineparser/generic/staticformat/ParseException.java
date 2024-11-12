@@ -2,6 +2,11 @@ package org.babinkuk.lineparser.generic.staticformat;
 
 public class ParseException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	Object recevedObject = null;
 	Object reportObject = null;
 	

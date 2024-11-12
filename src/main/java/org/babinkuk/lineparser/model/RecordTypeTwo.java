@@ -1,10 +1,14 @@
 package org.babinkuk.lineparser.model;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.babinkuk.lineparser.generic.staticformat.LineCollectionParser;
 import org.babinkuk.lineparser.generic.staticformat.LineParser;
 import org.babinkuk.lineparser.generic.staticformat.ObjectParser;
@@ -15,10 +19,13 @@ import org.babinkuk.lineparser.generic.staticformat.RecordUnrecognizedException;
 import org.babinkuk.lineparser.generic.staticformat.parsedobject.ParsedCalendar;
 import org.babinkuk.lineparser.generic.staticformat.parsedobject.ParsedString;
 import org.babinkuk.lineparser.generic.staticformat.validator.RegexValidator;
-import org.babinkuk.lineparser.model.RecordTypeOne.FIELDS;
 
 public class RecordTypeTwo extends RecordBase {
 
+	private final Logger log = LogManager.getLogger(getClass());
+	
+	public static List<FieldMetaData> fieldMetaDataList = new ArrayList<FieldMetaData>();
+	
 	public static enum FIELDS {
 		SIFRA(3, new RegexValidator("200", null)),
 		AKCIJA(2, new RegexValidator("50", null)),
@@ -31,7 +38,14 @@ public class RecordTypeTwo extends RecordBase {
 		private FIELDS(int l, ObjectParser op) {
 			this.l = l;
 			this.op = op;
+		
+			fieldMetaDataList.add(new FieldMetaData(this.name(), this.l, this.op));
 		}
+	}
+	
+	@Override
+	public List<FieldMetaData> getFeldMetaData() {
+		return fieldMetaDataList;
 	}
 	
 	public RecordTypeTwo() {
@@ -62,7 +76,7 @@ public class RecordTypeTwo extends RecordBase {
 		return lp;
 	}
 
-	public ProcessData parseRecord() {
+	public ProcessData parse() {
 		
 		ParsedObject sifra = getParsedObject(RecordTypeTwo.FIELDS.SIFRA.ordinal());
 		ParsedObject akc = getParsedObject(RecordTypeTwo.FIELDS.AKCIJA.ordinal());
@@ -78,41 +92,34 @@ public class RecordTypeTwo extends RecordBase {
 		}
 		
 		return rd;
-}
+	}
 
 	@Override
-	public ProcessData constructRecord(ProcessData processData) throws RecordUnrecognizedException, ParseException {
+	public RecordTypeTwo construct(ProcessData processData) throws RecordUnrecognizedException, ParseException {
 
-		RecordTypeTwo parsedRecord = new RecordTypeTwo();
 		List<String> errors = getErrors();
 		
-		LineCollectionParser lineCollectionParser = new LineCollectionParser();
-		lineCollectionParser.addLineParser(getLineParser());
+		RecordTypeTwo parsedRecord = new RecordTypeTwo();
 		
-		parsedRecord.getParsedObjects()[FIELDS.SIFRA.ordinal()] = new ParsedString(processData.getSifra());
-		parsedRecord.getParsedObjects()[FIELDS.AKCIJA.ordinal()] = new ParsedString(processData.getAkcija());
-		
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 		try {
-			cal.setTime(sdf.parse(processData.getDatum()));
+			RecordTypeTwo record = (RecordTypeTwo) constructRecord(parsedRecord, processData);
+			log.info("record {}", record);
+			
 		} catch (java.text.ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("error {}", e.getMessage());
+			throw new ParseException(e.getMessage());
+		}
+		catch (ParseException e) {
+			// TODO: handle exception
+			log.error("ParseException {}", e.getMessage());
+			throw new ParseException(e.getMessage());
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			log.error("Exception {}", e.getMessage());
+			throw new ParseException(e.getMessage());
 		}
 		
-		parsedRecord.getParsedObjects()[FIELDS.DATUM.ordinal()] = new ParsedCalendar(cal, "yyyy-MM-dd");
-		parsedRecord.getParsedObjects()[FIELDS.REZERVA.ordinal()] = new ParsedString(processData.getRezerva());
-		
-		String line = lineCollectionParser.construct(parsedRecord);
-		
-		ProcessData rd = new ProcessData();
-		rd.setLine(line);
-		
-		if (!errors.isEmpty()) {
-			rd.setErrors(errors);
-		}
-		
-		return rd;
+		return parsedRecord;
 	}
 }

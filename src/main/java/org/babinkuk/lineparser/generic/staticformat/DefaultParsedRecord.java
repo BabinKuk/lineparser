@@ -78,7 +78,6 @@ public class DefaultParsedRecord implements ParsedRecord {
 
 	@Override
 	public ParseException getParsedException(int index) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -106,5 +105,4 @@ public class DefaultParsedRecord implements ParsedRecord {
 	public boolean isLogicalGroupValid(String groupName) {
 		return false;
 	}
-
 }

@@ -13,7 +13,6 @@ public class NullParser implements ObjectParser {
 	
 	@Override
 	public ParsedObject parse(ParsedObject input, int sourceLength) throws ParseException {
-		// TODO Auto-generated method stub
 		return new ParsedNull();
 	}
 

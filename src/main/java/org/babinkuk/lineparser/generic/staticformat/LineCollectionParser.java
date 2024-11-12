@@ -44,7 +44,7 @@ public class LineCollectionParser {
 
 	// parsiranje linije, u slucaju greske baca ParseException, RecordUnrecognizedException
 	public ParsedRecord parseLine(String line) throws ParseException, RecordUnrecognizedException {
-		log.info("parseLine {}", line);
+		
 		try {
 			for (LineParser lp : lineParserList) {
 				try {
@@ -63,7 +63,7 @@ public class LineCollectionParser {
 	}
 
 	// izrada linije, u slucaju greske baca ParseException
-	public String construct(ParsedRecord parsedRecord) throws ParseException, RecordUnrecognizedException {
+	public String constructLine(ParsedRecord parsedRecord) throws ParseException, RecordUnrecognizedException {
 		
 		try {
 			for (LineParser lp : lineParserList) {

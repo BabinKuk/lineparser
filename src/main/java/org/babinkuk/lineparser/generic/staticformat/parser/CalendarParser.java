@@ -11,7 +11,6 @@ import org.babinkuk.lineparser.generic.staticformat.ParsedObject;
 import org.babinkuk.lineparser.generic.staticformat.parsedobject.ParsedCalendar;
 import org.babinkuk.lineparser.generic.staticformat.parsedobject.ParsedNull;
 import org.babinkuk.lineparser.generic.staticformat.parsedobject.ParsedString;
-import org.springframework.util.StringUtils;
 
 public class CalendarParser implements ObjectParser {
 	
@@ -86,8 +85,6 @@ public class CalendarParser implements ObjectParser {
 		this.oldestInclusive = oldestInclusive;
 		this.newestInclusive = newestInclusive;
 	}
-
-
 
 	@Override
 	public ParsedObject parse(ParsedObject input, int sourceLength) throws ParseException {

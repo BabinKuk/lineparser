@@ -29,7 +29,7 @@ public interface ParsedRecord {
 	
 	public boolean equals(Object compareValue, int index);
 	
-	// grupa polja koja spadaju u jedan tp greske
+	// grupa polja koja spadaju u jedan tip greske
 	// polja se mogu preklapati medju grupama
 	public boolean isLogicalGroupValid(String groupName);
 
