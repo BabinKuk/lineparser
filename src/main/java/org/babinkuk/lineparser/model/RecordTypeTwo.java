@@ -1,23 +1,15 @@
 package org.babinkuk.lineparser.model;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
-
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.babinkuk.lineparser.generic.staticformat.LineCollectionParser;
 import org.babinkuk.lineparser.generic.staticformat.LineParser;
 import org.babinkuk.lineparser.generic.staticformat.ObjectParser;
 import org.babinkuk.lineparser.generic.staticformat.ParseException;
 import org.babinkuk.lineparser.generic.staticformat.ParsedObject;
 import org.babinkuk.lineparser.generic.staticformat.ParsedRecord;
 import org.babinkuk.lineparser.generic.staticformat.RecordUnrecognizedException;
-import org.babinkuk.lineparser.generic.staticformat.parsedobject.ParsedCalendar;
-import org.babinkuk.lineparser.generic.staticformat.parsedobject.ParsedString;
 import org.babinkuk.lineparser.generic.staticformat.validator.RegexValidator;
 
 public class RecordTypeTwo extends RecordBase {
@@ -32,14 +24,14 @@ public class RecordTypeTwo extends RecordBase {
 		DATUM(10, ddmmyyyyO),
 		REZERVA(10, cO);
 		
-		public int l;
-		public ObjectParser op;
+		public int length;
+		public ObjectParser objectParser;
 		
 		private FIELDS(int l, ObjectParser op) {
-			this.l = l;
-			this.op = op;
-		
-			fieldMetaDataList.add(new FieldMetaData(this.name(), this.l, this.op));
+			this.length = l;
+			this.objectParser = op;
+			
+			fieldMetaDataList.add(new FieldMetaData(this.name(), this.length, this.objectParser));
 		}
 	}
 	
@@ -58,7 +50,6 @@ public class RecordTypeTwo extends RecordBase {
 	
 	@Override
 	public ParseException getParsedException(int index) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -66,7 +57,7 @@ public class RecordTypeTwo extends RecordBase {
 		
 		Object[][] recordParsedArray = new Object[FIELDS.values().length][2];
 		for (FIELDS f : FIELDS.values()) {
-			recordParsedArray[f.ordinal()] = new Object[] {f.op, f.l};
+			recordParsedArray[f.ordinal()] = new Object[] {f.objectParser, f.length};
 		}
 		
 		LineParser lp = new LineParser(new RegexValidator("(200).{22}", null));

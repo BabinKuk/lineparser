@@ -1,4 +1,4 @@
-package org.babinkuk.lineparser.generic.staticformat.formatter;
+package org.babinkuk.lineparser.generic.staticformat.parser;
 
 import org.babinkuk.lineparser.generic.staticformat.ObjectParser;
 import org.babinkuk.lineparser.generic.staticformat.ParseException;

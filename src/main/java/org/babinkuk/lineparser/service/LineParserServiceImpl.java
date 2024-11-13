@@ -1,11 +1,5 @@
 package org.babinkuk.lineparser.service;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.lineparser.common.ApiResponse;
@@ -14,11 +8,9 @@ import org.babinkuk.lineparser.generic.staticformat.LineParser;
 import org.babinkuk.lineparser.generic.staticformat.ParseException;
 import org.babinkuk.lineparser.generic.staticformat.ParsedRecord;
 import org.babinkuk.lineparser.generic.staticformat.RecordUnrecognizedException;
-import org.babinkuk.lineparser.generic.staticformat.parsedobject.ParsedString;
 import org.babinkuk.lineparser.model.RecordBase;
 import org.babinkuk.lineparser.model.RecordTypeOne;
 import org.babinkuk.lineparser.model.RecordTypeTwo;
-import org.babinkuk.lineparser.model.RecordTypeTwo.FIELDS;
 import org.babinkuk.lineparser.model.ProcessData;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -34,7 +26,6 @@ public class LineParserServiceImpl implements LineParserService {
 	
 	@Override
 	public ApiResponse parseLine(ProcessData processData) throws ParseException, RecordUnrecognizedException {
-		//log.info("parseLine {}", requestData);
 		
 		ApiResponse response = new ApiResponse();
 		response.setStatus(HttpStatus.OK);
@@ -45,10 +36,9 @@ public class LineParserServiceImpl implements LineParserService {
 		lineCollectionParser.addLineParser(RecordTypeTwo.getLineParser());
 		// TODO add more
 		//lineCollectionParser.addLineParser(RecordTypeOne.getLineParser());
-		log.info(lineCollectionParser.toString());
-		for (LineParser lp : lineCollectionParser.getLineParserList()) {
-			log.info("lp {}:{}", lp.getParsedRecordFactory().getClass().getSimpleName(), lp.getSegmentParserCollection().size());
-		}
+		//for (LineParser lp : lineCollectionParser.getLineParserList()) {
+		//	log.info("lp {}:{}", lp.getParsedRecordFactory().getClass().getSimpleName(), lp.getSegmentParserCollection().size());
+		//}
 		
 		ProcessData rd;
 		ParsedRecord parsedRecord;
@@ -74,12 +64,10 @@ public class LineParserServiceImpl implements LineParserService {
 		} catch (RecordUnrecognizedException e) {
 			String message = String.format("ERROR PARSING MESSAGE, RECORD UNRECOGNIZED : %s", processData.getLine());
 			log.error(message);
-			//e.printStackTrace();
 			throw new RecordUnrecognizedException(message);
 		} catch (ParseException e) {
 			String message = String.format("ERROR PARSING MESSAGE : %s", processData.getLine());
 			log.error(message);
-			//e.printStackTrace();
 			throw new ParseException(message);
 		}
 		
@@ -96,6 +84,11 @@ public class LineParserServiceImpl implements LineParserService {
 		LineCollectionParser lineCollectionParser = new LineCollectionParser();
 		lineCollectionParser.addLineParser(RecordTypeOne.getLineParser());
 		lineCollectionParser.addLineParser(RecordTypeTwo.getLineParser());
+		// TODO add more
+		//lineCollectionParser.addLineParser(RecordTypeOne.getLineParser());
+		//for (LineParser lp : lineCollectionParser.getLineParserList()) {
+		//	log.info("lp {}:{}", lp.getParsedRecordFactory().getClass().getSimpleName(), lp.getSegmentParserCollection().size());
+		//}
 		
 		ParsedRecord parsedRecord;
 		
@@ -107,7 +100,7 @@ public class LineParserServiceImpl implements LineParserService {
 				parsedRecord = new RecordTypeTwo();
 			}
 			else {
-				String message = String.format("ERROR PARSING MESSAGE, RECORD UNRECOGNIZED : %s", processData.getLine());
+				String message = String.format("ERROR CONSTRUCTING MESSAGE, RECORD UNRECOGNIZED");
 				log.error(message);
 				throw new ParseException(message);
 			}
@@ -122,14 +115,12 @@ public class LineParserServiceImpl implements LineParserService {
 			response.setResponseData(processData);
 			
 		} catch (RecordUnrecognizedException e) {
-			String message = String.format("ERROR PARSING MESSAGE, RECORD UNRECOGNIZED : %s", processData.getLine());
+			String message = String.format("ERROR CONSTRUCTING MESSAGE, RECORD UNRECOGNIZED");
 			log.error(message);
-			//e.printStackTrace();
 			throw new RecordUnrecognizedException(message);
 		} catch (ParseException e) {
-			String message = String.format("ERROR PARSING MESSAGE : %s", e.getMessage());
+			String message = String.format("ERROR CONSTRUCTING MESSAGE : %s", e.getMessage());
 			log.error(message);
-			//e.printStackTrace();
 			throw new ParseException(message);
 		}
 		

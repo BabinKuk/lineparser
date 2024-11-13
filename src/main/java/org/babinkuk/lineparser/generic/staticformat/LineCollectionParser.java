@@ -1,18 +1,14 @@
 package org.babinkuk.lineparser.generic.staticformat;
 
 import java.util.ArrayList;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * funkcionalost za parsiranje vise vrsta linija odredjenog formata 
- * koje se nalaze u listi lineParserList a koja sadrzi LineParser objekte
+ * koje se nalaze u listi lineParserList, a koja sadrzi LineParser objekte
  */
 public class LineCollectionParser {
 	
 	public static final int UNRECOGNIZED_LINE = 0;
-	
-	private final Logger log = LogManager.getLogger(getClass());
 	
 	private ArrayList<LineParser> lineParserList;
 	
@@ -42,7 +38,14 @@ public class LineCollectionParser {
 		this.lineParserList = lineParserList;
 	}
 
-	// parsiranje linije, u slucaju greske baca ParseException, RecordUnrecognizedException
+	/**
+	 * parsiranje linije, u slucaju greske baca ParseException, RecordUnrecognizedException
+	 * 
+	 * @param line
+	 * @return ParsedRecord
+	 * @throws ParseException
+	 * @throws RecordUnrecognizedException
+	 */
 	public ParsedRecord parseLine(String line) throws ParseException, RecordUnrecognizedException {
 		
 		try {
@@ -61,8 +64,15 @@ public class LineCollectionParser {
 		
 		throw new RecordUnrecognizedException(line);
 	}
-
-	// izrada linije, u slucaju greske baca ParseException
+	
+	/**
+	 * izrada linije, u slucaju greske baca ParseException, RecordUnrecognizedException
+	 * 
+	 * @param parsedRecord
+	 * @return String
+	 * @throws ParseException
+	 * @throws RecordUnrecognizedException
+	 */
 	public String constructLine(ParsedRecord parsedRecord) throws ParseException, RecordUnrecognizedException {
 		
 		try {

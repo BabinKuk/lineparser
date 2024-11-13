@@ -91,6 +91,7 @@ public class LineParser {
 	
 	// lista parsera za validaciju polja u liniji
 	ArrayList<SegmentParser> segmentParserCollection;
+	
 	public ArrayList<SegmentParser> getSegmentParserCollection() {
 		return segmentParserCollection;
 	}
@@ -107,21 +108,36 @@ public class LineParser {
 		clearParsers();
 	}
 	
-	// dodavanje parsera za sljedeće polje, prima objectparser i duzinu polja
+	/**
+	 * dodavanje parsera za odredjeno polje, prima objectparser i duzinu polja
+	 * 
+	 * @param op
+	 * @param len
+	 */
 	public void addParser(ObjectParser op, int len) {
 		segmentParserCollection.add(new SegmentParser(op, segmentPositionCounter, len));
 		segmentPositionCounter += len;
 		log.info("addParser to segmentParserCollection {}:{}:{}", op.getClass().getSimpleName(), len, segmentPositionCounter);
 	}
 	
-	// dodavanje parsera za odredjeno polje, prima objectparser, poziciju i duzinu polja
+	/**
+	 * dodavanje parsera za odredjeno polje, prima objectparser, poziciju i duzinu polja
+	 * 
+	 * @param op
+	 * @param pos
+	 * @param len
+	 */
 	public void addParser(ObjectParser op, int pos, int len) {
 		log.info("addParser {}:{}:{}", op, pos, len);
 		segmentParserCollection.add(new SegmentParser(op, pos, len));
 	}
 	
-	// dodavanje parsera za parsiranje polja
-	// prima Object[][] gdje unutarnje polje sadrzi objectparser i duzinu polja
+	/**
+	 * dodavanje parsera za parsiranje polja
+	 * prima Object[][] gdje unutarnje polje sadrzi objectparser i duzinu polja
+	 * 
+	 * @param Object[][] parserArray
+	 */
 	public void addParserArray(Object[][] parserArray) {
 		if (parserArray == null) {
 			return;
@@ -141,17 +157,31 @@ public class LineParser {
 		segmentPositionCounter = 0;
 	}
 	
-	// instanciranje ParsedRecord koji vraca parser
+	/**
+	 * instanciranje ParsedRecord koji vraca parser
+	 * 
+	 * @return ParsedRecord
+	 */
 	public ParsedRecord getParsedRecordFactory() {
 		return parsedRecordFactory;
 	}
 	
-	// postavljanje ParsedRecordFactory objekta sto je instanca ParsedRecord klase
+	/**
+	 * postavljanje ParsedRecordFactory objekta sto je instanca ParsedRecord klase
+	 * 
+	 * @param parsedRecordFactory
+	 */
 	public void setParsedRecordFactory(ParsedRecord parsedRecordFactory) {
 		this.parsedRecordFactory = parsedRecordFactory;
 	}
 	
-	// parsiranje linije, u slucaju greske baca ParseException
+	/**
+	 * parsiranje linije, u slucaju greske baca ParseException
+	 * 
+	 * @param line
+	 * @return ParsedRecord
+	 * @throws ParseException
+	 */
 	public ParsedRecord parse(String line) throws ParseException {
 		if (line == null) {
 			throw new ParseException(line, null, "Invalid line argument");
@@ -162,10 +192,9 @@ public class LineParser {
 		ParseException[] exceptionObjects = new ParseException[segmentParserCollection.size()];
 		
 		for (SegmentParser sp : segmentParserCollection) {
-			log.info("parsedObjects {}:{}:{}:{}", sp.getClass(), sp.op, sp.pos, sp.len);
+			log.info("SegmentParser sp {}:{}:{}:{}", sp.getClass(), sp.op, sp.pos, sp.len);
 		}
 		
-		boolean state = true;
 		int i = 0;
 		for (SegmentParser sp : segmentParserCollection) {
 			try {
@@ -174,7 +203,6 @@ public class LineParser {
 				exceptionObjects[i] = null;
 				
 			} catch (ParseException pex) {
-				state = false;
 				parsedObjects[i] = new ParsedNull();
 				exceptionObjects[i] = pex;
 			}
@@ -190,7 +218,13 @@ public class LineParser {
 		return parsedRecord;
 	}
 	
-	// izrada linije, u slucaju greske baca ParseException
+	/**
+	 * izrada linije, u slucaju greske baca ParseException
+	 * 
+	 * @param parsedRecord
+	 * @return String
+	 * @throws ParseException
+	 */
 	public String construct(ParsedRecord parsedRecord) throws ParseException {
 		
 		String line = "";
@@ -218,7 +252,13 @@ public class LineParser {
 		return line;
 	}
 	
-	// provjera da li zadana linija odgovara formatu
+	/**
+	 * provjera da li zadana linija odgovara formatu
+	 * 
+	 * @param line
+	 * @return ParsedObject
+	 * @throws ParseException
+	 */
 	public ParsedObject checkLine(String line) throws ParseException {
 		log.info("checkLine {}", line);
 		return lineIdFilter.parse(new ParsedString(line), line.length());

@@ -10,10 +10,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.lineparser.generic.staticformat.*;
-import org.babinkuk.lineparser.generic.staticformat.formatter.StringTrimmer;
 import org.babinkuk.lineparser.generic.staticformat.parsedobject.ParsedCalendar;
 import org.babinkuk.lineparser.generic.staticformat.parsedobject.ParsedString;
 import org.babinkuk.lineparser.generic.staticformat.parser.CalendarParser;
+import org.babinkuk.lineparser.generic.staticformat.parser.StringTrimmer;
 import org.babinkuk.lineparser.generic.staticformat.validator.RegexValidator;
 
 public abstract class RecordBase extends ParsedRecordAbstract {
@@ -82,7 +82,7 @@ public abstract class RecordBase extends ParsedRecordAbstract {
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + f.fieldName);
 			}
-			log.info("constructRecord {}", record.getParsedObjects()[index].getValue());
+			//log.info("constructRecord {}", record.getParsedObjects()[index].getValue());
 			
 			index++;
 		}

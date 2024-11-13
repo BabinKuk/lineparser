@@ -4,12 +4,13 @@ package org.babinkuk.lineparser.generic.staticformat;
  * interface koji definira funkcionalnost
  * koje moraju biti implementirane u sve ParsedObject objekte
  */
-public interface ParsedObject extends Comparable {
+public interface ParsedObject extends Comparable<Object> {
 	
 	/**
 	 * vraca vrijednost koju sadrzi
 	 * npr. ParsedBigDec vraca BigDecimal
-	 * @return
+	 * 
+	 * @return Object
 	 */
 	public Object getValue();
 	
