@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.babinkuk.lineparser.common.ApiResponse;
 import org.babinkuk.lineparser.generic.staticformat.LineCollectionParser;
-import org.babinkuk.lineparser.generic.staticformat.LineParser;
 import org.babinkuk.lineparser.generic.staticformat.ParseException;
 import org.babinkuk.lineparser.generic.staticformat.ParsedRecord;
 import org.babinkuk.lineparser.generic.staticformat.RecordUnrecognizedException;

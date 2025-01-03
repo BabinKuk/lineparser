@@ -1,8 +1,8 @@
 package org.babinkuk.lineparser.generic.staticformat;
 
 /**
- * definira funkconalnost koju moraju implementirati svi parseri za odredjene tipove polja
- * Parseri koji mogu embedati druge parsere pri parsiranju p, prvo njih pozivaju,
+ * Definira funkconalnost koju moraju implementirati svi parseri za odredjene tipove polja</br>
+ * Parseri koji mogu embedati druge parsere pri parsiranju prvo njih pozivaju,
  * a pri rekonstrukciji polja ih zovu nakon vlastite obrade  
  */
 public interface ObjectParser {

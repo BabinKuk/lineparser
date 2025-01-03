@@ -60,7 +60,6 @@ public class LineParser {
 		}
 		
 		protected String construct(ParsedObject parsedObject, String line) throws ParseException {
-			
 //			log.info("{}:{}:{}:{}:{}", parsedObject, line, pos, len, op.getClass());
 //			if (line.length() < (pos + len)) {
 //				log.info("< (pos + len)");
@@ -69,10 +68,9 @@ public class LineParser {
 			
 			ParsedObject po = op.construct(parsedObject, len);
 			
-			String parsedString;
-			parsedString = po.toString();
+			String parsedString = po.toString();
 			
-			return line += po.toString();
+			return line += parsedString;
 		}
 		
 		protected String construct(String parsedString, String line) throws ParseException {

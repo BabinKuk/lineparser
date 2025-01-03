@@ -89,7 +89,7 @@ public class RecordTypeOne extends RecordBase {
 	@Override
 	public RecordTypeOne construct(ProcessData processData) throws RecordUnrecognizedException, ParseException {
 
-		List<String> errors = getErrors();
+		//List<String> errors = getErrors();
 		
 		RecordTypeOne parsedRecord = new RecordTypeOne();
 		
